@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>管理</title>
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../plugins/select2/select2.css">
+    <link rel="stylesheet" href="../plugins/select2/select2-bootstrap.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../plugins/select2/select2.min.js"></script>
+
+    <script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script>
+    <!-- 分页组件开始 -->
+    <script src="../plugins/angularjs/pagination.js"></script>
+    <link rel="stylesheet" href="../plugins/angularjs/pagination.css">
+    <!-- 分页组件结束 -->
+    <script type="text/javascript" src="../js/base_pagination.js"></script>
+
+    <script type="text/javascript" src="../plugins/select2/angular-select2.js"></script>
+
+    <script type="text/javascript" src="../js/service/brandService.js"></script>
+    <script type="text/javascript" src="../js/service/specificationService.js"></script>
+    <script type="text/javascript" src="../js/service/typeTemplateService.js"></script>
+
+    <script type="text/javascript" src="../js/controller/baseController.js"></script>
+    <script type="text/javascript" src="../js/controller/typeTemplateController.js"></script>
+
+</head>
+<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="typeTemplateController"
+      ng-init="selectBrandList();selectSpecList()">
+<!-- .box-body -->
+<div class="box-header with-border">
+    <h3 class="box-title">管理</h3>
+</div>
+
+<div class="box-body">
+
+    <!-- 数据表格 -->
+    <div class="table-box">
+
+        <!--工具栏-->
+        <div class="pull-left">
+            <div class="form-group form-inline">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default" title="新建" data-toggle="modal"
+                            data-target="#editModal" ng-click="entity={customAttributeItems:[]}"><i class="fa fa-file-o"></i> 新建
+                    </button>
+                    <button type="button" class="btn btn-default" title="删除" ng-click="dele()"><i
+                            class="fa fa-trash-o"></i> 删除
+                    </button>
+                    <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i
+                            class="fa fa-refresh"></i> 刷新
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="box-tools pull-right">
+            <div class="has-feedback">
+            </div>
+        </div>
+        <!--工具栏/-->
+
+        <!--数据列表-->
+        <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
+            <thead>
+            <tr>
+                <th class="" style="padding-right:0px">
+                    <input id="selall" type="checkbox" class="icheckbox_square-blue">
+                </th>
+                <th class="sorting"></th>
+                <th class="sorting">模板名称</th>
+                <th class="sorting">关联规格</th>
+                <th class="sorting">关联品牌</th>
+                <th class="sorting">自定义属性</th>
+
+                <th class="text-center">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="pojo in list">
+                <td><input type="checkbox" ng-click="updateSelection($event,pojo.id)"></td>
+                <td>{{pojo.id}}</td>
+                <td>{{pojo.name}}</td>
+                <td>{{jsonStringParse(pojo.specIds, "text")}}</td>
+                <td>{{jsonStringParse(pojo.brandIds, "text")}}</td>
+                <td>{{jsonStringParse(pojo.customAttributeItems, "text")}}</td>
+
+                <td class="text-center">
+                    <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal"
+                            ng-click="findOne(pojo.id)">修改
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <!--数据列表/-->
+    </div>
+    <!-- 数据表格 /-->
+    <!-- 分页 -->
+    <tm-pagination conf="paginationConf"></tm-pagination>
+</div>
+<!-- /.box-body -->
+
+<!-- 编辑窗口 -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">编辑</h3>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-striped" width="800px">
+                    <tr>
+                        <td>模板名称</td>
+                        <td><input class="form-control" ng-model="entity.name" placeholder="模板名称"></td>
+                    </tr>
+                    <tr>
+                        <td>关联规格</td>
+                        <td><input select2 select2-model="entity.specIds" config="specList" multiple placeholder="支持多选哦" class="form-control" type="text"/></td>
+
+                    </tr>
+                    <tr>
+
+                        <td>关联品牌</td>
+                        {{entity.brandIds}}
+                        <td><input select2 select2-model="entity.brandIds" config="brandList" multiple placeholder="支持多选哦" class="form-control" type="text"/></td>
+                    </tr>
+                    <tr>
+
+                        <td>自定义属性</td>
+
+                        <!--<td><input class="form-control" ng-model="entity.customAttributeItems" placeholder="自定义属性"></td>-->
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" ng-click="addRow()" class="btn btn-default" title="新增扩展属性"><i
+                                        class="fa fa-file-o"></i> 新增扩展属性
+                                </button>
+
+                            </div>
+                            <table class="table table-bordered table-striped" width="800px">
+                                <thead>
+                                <tr>
+                                    <td><input type="checkbox" class="icheckbox_square-blue"></td>
+                                    <td>属性名称</td>
+                                    <td>操作</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <!--entity.customAttributeItems = [{"text":"内存大小"},{"text":"颜色"}]-->
+                                <tr ng-repeat="attr in entity.customAttributeItems">
+                                    <td><input type="checkbox" class="icheckbox_square-blue"></td>
+                                    <td><input class="form-control" ng-model="attr.text" placeholder="属性名称"></td>
+                                    <td>
+                                        <button type="button" ng-click="deleRow($index)" class="btn btn-default"
+                                                title="删除"><i class="fa fa-trash-o"></i> 删除
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </td>
+
+                    </tr>
+
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" data-dismiss="modal" aria-hidden="true" ng-click="save()">保存</button>
+                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
