@@ -114,13 +114,25 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
                 $scope.entity.goods.typeTemplateId = response.typeId;
             })
         })
-    }
+    };
 
     // 查询模板关联数据
     $scope.$watch("entity.goods.typeTemplateId", function (newValue, oldValue) {
         typeTemplateService.findOne(newValue).success(function (response) {
             $scope.brandList = JSON.parse(response.brandIds);
         })
-    })
+    });
+
+    $scope.status = ["未审核","审核通过","审核未通过","关闭"];
+
+    $scope.itemCatList = [];
+
+    $scope.selectItemCatList = function () {
+        itemCatService.findAll().success(function (response) {
+            for (var i = 0; i < response.length; i++) {
+                $scope.itemCatList[response[i].id] = response[i].name;
+            }
+        })
+    }
 
 });	
