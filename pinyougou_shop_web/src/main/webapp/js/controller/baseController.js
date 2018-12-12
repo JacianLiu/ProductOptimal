@@ -52,4 +52,14 @@ app.controller("baseController",function($scope){
 		return value;
 	};
 
+
+	// 判断该对象是否存在
+	$scope.getObjectByKey = function (list, key, value) {
+		for (var i = 0; i < list.length; i++) {
+			if (list[i][key] == value) {
+				return list[i];
+			}
+		}
+		return null;
+	}
 });
