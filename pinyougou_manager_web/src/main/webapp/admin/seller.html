@@ -50,6 +50,14 @@
         </div>
         <div class="box-tools pull-right">
             <div class="has-feedback">
+                公司名称：<input ng-model="searchEntity.name" ng-keyup="reloadList()">
+                店铺名称： <input ng-model="searchEntity.nickName" ng-keyup="reloadList()" >
+                状态：
+                <input type="radio" name="choose" value="" checked="checked" ng-click="searchEntity={};reloadList()"/>全部
+                <input type="radio" name="choose" ng-click="searchEntity={status:'0'};reloadList()"/>待审核
+                <input type="radio" name="choose" ng-click="searchEntity={status:'1'};reloadList()"/>已审核
+                <input type="radio" name="choose" ng-click="searchEntity={status:'2'};reloadList()"/>审核未通过
+                <input type="radio" name="choose" ng-click="searchEntity={status:'3'};reloadList()"/>关闭
             </div>
         </div>
         <!--工具栏/-->
