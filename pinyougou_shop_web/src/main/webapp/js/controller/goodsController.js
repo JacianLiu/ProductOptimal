@@ -87,7 +87,6 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
     };
 
     // 查询二级分类
-    $scope.selectChange1 = function () {
         $scope.$watch("entity.goods.category1Id", function (newValue, oldValue) {
             itemCatService.findByParentId(newValue).success(function (response) {
                 $scope.itemCat2List = response;
@@ -97,26 +96,21 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
 
             })
         })
-    }
 
     // 查询三级分类
-    $scope.selectChange2 = function () {
         $scope.$watch("entity.goods.category2Id", function (newValue, oldValue) {
             itemCatService.findByParentId(newValue).success(function (response) {
                 $scope.itemCat3List = response;
             })
         })
-    }
 
-    // 查询三级分类
-    $scope.selectChange3 = function () {
+    // 查询模板数据
         $scope.$watch("entity.goods.category3Id", function (newValue, oldValue) {
             itemCatService.findOne(newValue).success(function (response) {
                 $scope.entity.goods.typeTemplateId = response.typeId;
                 $scope.entity.goodsDesc.specificationItems = [];
             })
         })
-    };
 
     // 查询模板关联数据
     $scope.$watch("entity.goods.typeTemplateId", function (newValue, oldValue) {
