@@ -152,7 +152,8 @@
                     <div class="row data-type">
                         <!-- 颜色图片 -->
                         <div class="btn-group">
-                            <button type="button" ng-click="imageEntity={}" class="btn btn-default" title="新建" data-target="#uploadModal"
+                            <button type="button" ng-click="imageEntity={}" class="btn btn-default" title="新建"
+                                    data-target="#uploadModal"
                                     data-toggle="modal"><i class="fa fa-file-o"></i> 新建
                             </button>
 
@@ -175,7 +176,8 @@
                                     <img alt="{{pojo.color}}" src="{{pojo.url}}" width="100px" height="100px">
                                 </td>
                                 <td>
-                                    <button ng-click="deleImage($index)" type="button" class="btn btn-default" title="删除"><i class="fa fa-trash-o"></i> 删除
+                                    <button ng-click="deleImage($index)" type="button" class="btn btn-default"
+                                            title="删除"><i class="fa fa-trash-o"></i> 删除
                                     </button>
                                 </td>
                             </tr>
@@ -203,13 +205,11 @@
                     <div class="row data-type">
                         <div class="col-md-2 title">是否启用规格</div>
                         <div class="col-md-10 data">
-                            <input type="checkbox">
-                            {{entity.goodsDesc.specificationItems}}
+                            <input type="checkbox" ng-model="entity.goods.isEnableSpec" ng-true-value="1" ng-false-value="0">
                         </div>
                     </div>
                     <p>
-
-                    <div>
+                    <div ng-if="entity.goods.isEnableSpec==1">
 
                         <div class="row data-type">
 
@@ -217,7 +217,8 @@
                                 <div class="col-md-2 title">{{spec.text}}</div>
                                 <div class="col-md-10 data">
                                     <span ng-repeat="option in spec.options">
-                                        <input ng-click="updateSpecAttribute($event,spec.text,option.optionName)" type="checkbox">{{option.optionName}}
+                                        <input ng-click="updateSpecAttribute($event,spec.text,option.optionName);createItemList()"
+                                               type="checkbox">{{option.optionName}}
                                     </span>
                                 </div>
                             </div>
@@ -228,8 +229,9 @@
                             <table class="table table-bordered table-striped table-hover dataTable">
                                 <thead>
                                 <tr>
-                                    <th class="sorting">屏幕尺寸</th>
-                                    <th class="sorting">网络制式</th>
+                                    <th class="sorting" ng-repeat="spec in entity.goodsDesc.specificationItems">
+                                        {{spec.attributeName}}
+                                    </th>
                                     <th class="sorting">价格</th>
                                     <th class="sorting">库存</th>
                                     <th class="sorting">是否启用</th>
@@ -237,12 +239,9 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>
-                                        4.0
-                                    </td>
-                                    <td>
-                                        3G
+                                <tr ng-repeat="item in entity.itemList">
+                                    <td ng-repeat="specification in entity.goodsDesc.specificationItems">
+                                        {{item.spec[specification.attributeName]}}
                                     </td>
                                     <td>
                                         <input class="form-control" placeholder="价格">
@@ -251,78 +250,16 @@
                                         <input class="form-control" placeholder="库存数量">
                                     </td>
                                     <td>
-                                        <input type="checkbox">
+                                        <input type="checkbox" ng-model="item.status" ng-true-value="1" ng-false-value="0">
                                     </td>
                                     <td>
-                                        <input type="checkbox">
+                                        <input type="checkbox" ng-model="item.isDefault" ng-true-value="1" ng-false-value="0">
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>
-                                        4.0
-                                    </td>
-                                    <td>
-                                        4G
-                                    </td>
-                                    <td>
-                                        <input class="form-control" placeholder="价格">
-                                    </td>
-                                    <td>
-                                        <input class="form-control" placeholder="库存数量">
-                                    </td>
-                                    <td>
-                                        <input type="checkbox">
-                                    </td>
-                                    <td>
-                                        <input type="checkbox">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        5.0
-                                    </td>
-                                    <td>
-                                        3G
-                                    </td>
-                                    <td>
-                                        <input class="form-control" placeholder="价格">
-                                    </td>
-                                    <td>
-                                        <input class="form-control" placeholder="库存数量">
-                                    </td>
-                                    <td>
-                                        <input type="checkbox">
-                                    </td>
-                                    <td>
-                                        <input type="checkbox">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        5.0
-                                    </td>
-                                    <td>
-                                        4G
-                                    </td>
-                                    <td>
-                                        <input class="form-control" placeholder="价格">
-                                    </td>
-                                    <td>
-                                        <input class="form-control" placeholder="库存数量">
-                                    </td>
-                                    <td>
-                                        <input type="checkbox">
-                                    </td>
-                                    <td>
-                                        <input type="checkbox">
-                                    </td>
-                                </tr>
-
                                 </tbody>
                             </table>
 
                         </div>
-
                     </div>
                 </div>
 
@@ -379,7 +316,8 @@
 
             </div>
             <div class="modal-footer">
-                <button class="btn btn-success" data-dismiss="modal" ng-click="addImageEntity()" aria-hidden="true">保存</button>
+                <button class="btn btn-success" data-dismiss="modal" ng-click="addImageEntity()" aria-hidden="true">保存
+                </button>
                 <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
             </div>
         </div>
