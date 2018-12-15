@@ -107,7 +107,24 @@ public class GoodsController {
 	 */
 	@RequestMapping("/search")
 	public PageResult search(@RequestBody TbGoods goods, int page, int rows  ){
-		return goodsService.findPage(goods, page, rows);		
+		goods.setAuditStatus("0");
+		return goodsService.findPage(goods, page, rows);
 	}
-	
+
+	/**
+	 * 批量更新商品状态
+	 * @param ids 商品ID
+	 * @param status 商品更新后的状态
+	 * @return 更新结果
+	 */
+	@RequestMapping("/updateStatus")
+	public Result updateStatus(Long[] ids, String status) {
+		try {
+			goodsService.updateStatus(ids, status);
+			return new Result(true, "状态更新成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Result(false, "状态更新失败");
+		}
+	}
 }

@@ -77,4 +77,11 @@ public interface GoodsService {
      * @param isMarketable 修改后的状态
      */
     void updateIsMarketable(Long[] ids, String isMarketable);
+
+    /**
+     * 批量更新商品状态
+     * @param ids 商品ID
+     * @param status 商品更新后的状态
+     */
+    void updateStatus(Long[] ids, String status);
 }
