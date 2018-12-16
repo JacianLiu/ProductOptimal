@@ -100,7 +100,7 @@ $.widget = function( name, base, prototype ) {
 		}
 	};
 
-	// Extend with the existing constructor to carry over any static properties
+	// Extend with the existing constructor to carry over any static config
 	$.extend( constructor, existingConstructor, {
 		version: prototype.version,
 
@@ -682,7 +682,7 @@ $.Widget.prototype = {
 		// so we need to reset the target on the new event
 		event.target = this.element[ 0 ];
 
-		// Copy original event properties over to the new event
+		// Copy original event config over to the new event
 		orig = event.originalEvent;
 		if ( orig ) {
 			for ( prop in orig ) {
