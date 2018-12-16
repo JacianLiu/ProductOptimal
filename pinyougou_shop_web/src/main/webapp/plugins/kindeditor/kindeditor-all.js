@@ -8457,7 +8457,7 @@ SWFUpload.prototype.destroy = function () {
 		movieElement = this.getMovieElement();
 
 		if (movieElement && typeof(movieElement.CallFunction) === "unknown") { // We only want to do this in IE
-			// Loop through all the movie's properties and remove all function references (DOM/JS IE 6/7 memory leak workaround)
+			// Loop through all the movie's config and remove all function references (DOM/JS IE 6/7 memory leak workaround)
 			for (var i in movieElement) {
 				try {
 					if (typeof(movieElement[i]) === "function") {
@@ -8884,7 +8884,7 @@ SWFUpload.prototype.executeNextEvent = function () {
 };
 
 // Private: unescapeFileParams is part of a workaround for a flash bug where objects passed through ExternalInterface cannot have
-// properties that contain characters that are not valid for JavaScript identifiers. To work around this
+// config that contain characters that are not valid for JavaScript identifiers. To work around this
 // the Flash Component escapes the parameter names and we must unescape again before passing them along.
 SWFUpload.prototype.unescapeFilePostParams = function (file) {
 	var reg = /[$]([0-9a-f]{4})/i;
