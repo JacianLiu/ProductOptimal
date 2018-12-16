@@ -2,8 +2,9 @@ package com.pinyougou.mapper;
 
 import com.pinyougou.pojo.TbItem;
 import com.pinyougou.pojo.TbItemExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface TbItemMapper {
     int countByExample(TbItemExample example);
@@ -27,4 +28,7 @@ public interface TbItemMapper {
     int updateByPrimaryKeySelective(TbItem record);
 
     int updateByPrimaryKey(TbItem record);
+
+    List<TbItem> findAllGrounding();
+
 }
