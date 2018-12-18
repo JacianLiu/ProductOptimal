@@ -13,7 +13,7 @@
 	<context:component-scan base-package="com.pinyougou.solr"/>
 
 	<!-- solr服务器地址 -->
-	<solr:solr-server id="solrServer" url="http://127.0.0.1:8080/solr" />
+	<solr:solr-server id="solrServer" url="http://192.168.25.129:8080/solr" />
 
    
 	<!-- solr模板，使用solr模板可对索引库进行CRUD的操作 -->

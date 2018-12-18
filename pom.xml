@@ -20,6 +20,9 @@
         <module>pinyougou_content_service</module>
         <module>pinyougou_portal_web</module>
         <module>pinyougou_solr_util</module>
+        <module>pinyougou_search_interface</module>
+        <module>pinyougou_search_service</module>
+        <module>pinyougou_search_web</module>
     </modules>
     <packaging>pom</packaging>
 
