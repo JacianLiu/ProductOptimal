@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.pinyougou.pojo.TbItem;
 import com.pinyougou.search.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.query.*;
 import org.springframework.data.solr.core.query.result.HighlightEntry;
@@ -56,7 +57,7 @@ public class SearchServiceImpl implements SearchService {
             Criteria brandCriteria = new Criteria("item_brand").is(brand);
             // 设置过滤条件查询对象
             FilterQuery filterQuery = new SimpleFilterQuery(brandCriteria);
-            query.addCriteria(brandCriteria);
+            query.addFilterQuery(filterQuery);
         }
         // 3.商品分类过滤条件
         String category = (String) searchMap.get("category");
@@ -65,16 +66,57 @@ public class SearchServiceImpl implements SearchService {
             Criteria categoryCriteria = new Criteria("item_brand").is(category);
             // 设置分类条件查询对象
             FilterQuery filterQuery = new SimpleFilterQuery(categoryCriteria);
-            query.addCriteria(categoryCriteria);
+            query.addFilterQuery(filterQuery);
         }
         // 4. 商品规格过滤条件查询
-
+        Map<String, String> specMap = (Map<String, String>) searchMap.get("spec");
+        if (specMap != null) {
+            for (String key : specMap.keySet()) {
+                // 设置规格过滤条件
+                Criteria specCriteria = new Criteria("item_spec_" + key).is(specMap.get(key));
+                // 设置过滤条件查询对象
+                FilterQuery filterQuery = new SimpleFilterQuery(specCriteria);
+                query.addFilterQuery(filterQuery);
+            }
+        }
         // 5. 商品价格区间过滤条件查询
-
+        String price = (String) searchMap.get("price");
+        if (price != null && !"".equals(price)) {
+            String[] prices = price.split("-");
+            if (!"0".equals(prices[0])) {
+                // 设置价格过滤条件对象
+                Criteria priceCriteria = new Criteria("item_price").greaterThanEqual(prices[0]);
+                // 设置条件过滤对象
+                SimpleFilterQuery filterQuery = new SimpleFilterQuery(priceCriteria);
+                query.addFilterQuery(filterQuery);
+            }
+            if (!"*".equals(prices[1])) {
+                // 设置价格过滤条件对象
+                Criteria priceCriteria = new Criteria("item_price").lessThanEqual(prices[1]);
+                // 设置条件过滤对象
+                SimpleFilterQuery filterQuery = new SimpleFilterQuery(priceCriteria);
+                query.addFilterQuery(filterQuery);
+            }
+        }
         // 6. 排序查询
-
+        String sortFiled = (String) searchMap.get("sortField");
+        String sort = (String) searchMap.get("sort");
+        if (sortFiled != null && !"".equals(sortFiled)) {
+            if ("ASC".equals(sort)) {
+                // 升序 参数1 : 排序条件  参数2 : 排序字段
+                query.addSort(new Sort(Sort.Direction.ASC, "item_" + sortFiled));
+            } else {
+                // 降序
+                query.addSort(new Sort(Sort.Direction.DESC, "item_" + sortFiled));
+            }
+        }
         // 7. 分页条件查询
-
+        Integer pageNo = (Integer) searchMap.get("pageNo");
+        Integer pageSize = (Integer) searchMap.get("pageSize");
+        // 设置分页起始值
+        query.setOffset((pageNo - 1) * pageSize);
+        // 每页查询记录数
+        query.setRows(pageSize);
         // 创建高亮对象
         HighlightOptions highlightOptions = new HighlightOptions();
         // 设置高亮字段
@@ -102,6 +144,10 @@ public class SearchServiceImpl implements SearchService {
         // 创建返回数据Map
         Map<String, Object> resultMap= new HashMap<>();
         resultMap.put("rows", content);
+        // 总页数
+        resultMap.put("totalPages", page.getTotalPages());
+        // 当前页码
+        resultMap.put("pageNo", pageNo);
         return resultMap;
     }
 }
