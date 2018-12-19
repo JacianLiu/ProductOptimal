@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- Dubbo 协议 默认端口号 20880 -->
+	<dubbo:protocol name="dubbo" port="20884"/>
+	<!-- 提供服务应用(项目)名称 -->
+	<dubbo:application name="pinyougou_search_service"/>
+	<!-- zookeeper 注册中心链接地址 zookeeper默认端口 2181 -->
+    <dubbo:registry address="zookeeper://192.168.25.129:2181"/>
+	<!-- 通过扫描包的形式注册服务 -->
+    <dubbo:annotation package="com.pinyougou.page.service.impl" />
+	<!-- 调用服务超时时间 默认 1000(毫秒) -->
+   <dubbo:provider timeout="50000"/>
+   
+</beans>
