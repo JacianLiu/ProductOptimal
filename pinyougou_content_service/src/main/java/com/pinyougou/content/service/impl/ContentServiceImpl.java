@@ -135,16 +135,14 @@ public class ContentServiceImpl implements ContentService {
         List<TbContent> contentList = (List<TbContent>) redisTemplate.boundHashOps("content").get(categoryId);
         // 如果缓存中没有数据则从数据库中读取数据
         if (contentList == null) {
-			System.out.println("Data From MySql .................");
 			// 从数据库中读取数据
 			TbContentExample example = new TbContentExample();
+			example.setOrderByClause("sortOrder");
 			Criteria criteria = example.createCriteria();
 			criteria.andCategoryIdEqualTo(categoryId);
 			criteria.andStatusEqualTo("1");
 			contentList = contentMapper.selectByExample(example);
 			redisTemplate.boundHashOps("content").put(categoryId, contentList);
-		} else {
-			System.out.println("Data From Redis .................");
 		}
         // 返回结果集
 		return contentList;
