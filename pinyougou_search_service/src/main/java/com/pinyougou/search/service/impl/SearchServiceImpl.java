@@ -63,11 +63,12 @@ public class SearchServiceImpl implements SearchService {
         String category = (String) searchMap.get("category");
         if (category != null && !"".equals(category)) {
             // 设置分类过滤条件
-            Criteria categoryCriteria = new Criteria("item_brand").is(category);
+            Criteria categoryCriteria = new Criteria("item_category").is(category);
             // 设置分类条件查询对象
             FilterQuery filterQuery = new SimpleFilterQuery(categoryCriteria);
             query.addFilterQuery(filterQuery);
         }
+
         // 4. 商品规格过滤条件查询
         Map<String, String> specMap = (Map<String, String>) searchMap.get("spec");
         if (specMap != null) {
