@@ -44,6 +44,8 @@ public class SearchServiceImpl implements SearchService {
         if (keywords != null && !"".equals(keywords)) {
             // 有关键字,按照关键字查询
             criteria = new Criteria("item_keywords").is(keywords);
+            FilterQuery filterQuery = new SimpleFilterQuery(criteria);
+            query.addFilterQuery(filterQuery);
         } else {
             // 没有关键字查询所有
             criteria = new Criteria().expression("*:*");
