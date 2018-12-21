@@ -137,7 +137,7 @@ public class ContentServiceImpl implements ContentService {
         if (contentList == null) {
 			// 从数据库中读取数据
 			TbContentExample example = new TbContentExample();
-			example.setOrderByClause("sortOrder");
+			example.setOrderByClause("sort_order");
 			Criteria criteria = example.createCriteria();
 			criteria.andCategoryIdEqualTo(categoryId);
 			criteria.andStatusEqualTo("1");
