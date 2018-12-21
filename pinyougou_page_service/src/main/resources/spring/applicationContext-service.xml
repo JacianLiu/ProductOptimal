@@ -8,6 +8,15 @@
         http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
+
+	<!-- 页面静态化模板配置 -->
+	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<!-- 模板加载路径 -->
+		<property name="templateLoaderPath" value="/WEB-INF/ftl/" />
+		<!-- 设置模板默认字符集 -->
+		<property name="defaultEncoding" value="UTF-8" />
+	</bean>
+
 	<!-- Dubbo 协议 默认端口号 20880 -->
 	<dubbo:protocol name="dubbo" port="20884"/>
 	<!-- 提供服务应用(项目)名称 -->

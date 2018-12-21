@@ -14,8 +14,10 @@ import com.pinyougou.sellergoods.service.GoodsService;
 import entity.Goods;
 import entity.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.jms.Destination;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -207,6 +209,21 @@ public class GoodsServiceImpl implements GoodsService {
         return new PageResult(page.getTotal(), page.getResult());
     }
 
+    @Autowired
+    private JmsTemplate jmsTemplate;
+
+    @Autowired
+    private Destination addItemSolrTextDestination;
+
+    @Autowired
+    private Destination deleteItemSolrTextDestination;
+
+    @Autowired
+    private Destination addItemPageTextDestination;
+
+    @Autowired
+    private Destination deleteItemPageTextDestination;
+
     /**
      * 批量上下架
      *
@@ -219,6 +236,25 @@ public class GoodsServiceImpl implements GoodsService {
             TbGoods tbGoods = goodsMapper.selectByPrimaryKey(id);
             //只要审核通过的商品才能上下架
             if ("1".equals(tbGoods.getAuditStatus())) {
+
+                if ("1".equals(isMarketable)) {
+                    // 商品上架 , 同步索引库
+                    jmsTemplate.send(addItemSolrTextDestination,
+                            session -> session.createTextMessage(id + ""));
+                    // 商品上架 , 同步生成静态页面
+                    jmsTemplate.send(addItemPageTextDestination,
+                            session -> session.createTextMessage(id + ""));
+                }
+
+                if ("0".equals(isMarketable)) {
+                    // 商品下架 , 删除索引库
+                    jmsTemplate.send(deleteItemSolrTextDestination,
+                            session -> session.createTextMessage(id + ""));
+                    // 商品下架 , 同步删除静态页面
+                    jmsTemplate.send(deleteItemPageTextDestination,
+                            session -> session.createTextMessage(id + ""));
+                }
+
                 tbGoods.setIsMarketable(isMarketable);
                 goodsMapper.updateByPrimaryKey(tbGoods);
             } else {

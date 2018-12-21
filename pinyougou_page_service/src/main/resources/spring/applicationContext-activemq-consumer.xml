@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:amq="http://activemq.apache.org/schema/core"
+       xmlns:jms="http://www.springframework.org/schema/jms"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context   
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/jms
+		http://www.springframework.org/schema/jms/spring-jms.xsd">
+    <!-- 配置 ActiveMQ 链接工厂 -->
+    <bean id="targetConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="tcp://192.168.25.129:61616"/>
+    </bean>
+
+    <!-- spring 管理 connectionFactory  -->
+    <bean id="connectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory">
+        <!-- 指定 ActiveMQ bean -->
+        <property name="targetConnectionFactory" ref="targetConnectionFactory"/>
+    </bean>
+
+    <!-- spring 提供的 JMS 工具类 -->
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory" ref="connectionFactory"/>
+    </bean>
+
+    <!-- 队列目的地 : 商品上架同步索引库 -->
+    <bean id="addItemPageTextDestination" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg value="add_item_page"/>
+    </bean>
+
+    <!-- 配置监听类 -->
+    <bean id="addItemSolrMessageListener" class="com.pinyougou.page.listener.AddItemSolrMessageListener"/>
+    <!-- 消息监听容器 -->
+    <bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <!-- 指定 ActiveMQ 连接工厂 -->
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <!-- 指定具体消费者信息 -->
+        <property name="destination" ref="addItemPageTextDestination"/>
+        <!-- 指定消费信息的监听类 -->
+        <property name="messageListener" ref="addItemSolrMessageListener"/>
+    </bean>
+
+    <!-- 商品下架 同步删除索引库 -->
+    <bean id="deleteItemPageTextDestination" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg value="delete_item_page"/>
+    </bean>
+    <!-- 配置监听类 -->
+    <bean id="deleteItemSolrMessageListener" class="com.pinyougou.page.listener.DeleteItemSolrMessageListener"/>
+    <!-- 消息监听容器 -->
+    <bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <!-- 指定 ActiveMQ 连接工厂 -->
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <!-- 指定具体消费者信息 -->
+        <property name="destination" ref="deleteItemPageTextDestination"/>
+        <!-- 指定消费信息的监听类 -->
+        <property name="messageListener" ref="deleteItemSolrMessageListener"/>
+    </bean>
+</beans>
