@@ -114,7 +114,7 @@ public class SearchServiceImpl implements SearchService {
             }
         }
         // 7. 分页条件查询
-        Integer pageNo = (Integer) searchMap.get("pageNo");
+        Integer pageNo = Integer.parseInt(searchMap.get("pageNo") + "");
         Integer pageSize = (Integer) searchMap.get("pageSize");
         // 设置分页起始值
         query.setOffset((pageNo - 1) * pageSize);

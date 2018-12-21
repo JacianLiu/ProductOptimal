@@ -1,3 +1,4 @@
+// $location 内置对象 , 完成路由传参 ( 参数的获取 )
 app.controller("searchController",function($scope,$controller,$location,searchService){
 	
 	//控制器继承
@@ -20,7 +21,7 @@ app.controller("searchController",function($scope,$controller,$location,searchSe
 	//获取门户网站传递的参数
 	var keywords =$location.search()["keywords"];
 	
-	if(keywords!=null && keywords!=""){
+	if(keywords!="" && keywords!=null && keywords != "undefined"){
 		//门户网站输入了搜索关键字
 		$scope.searchMap.keywords=keywords;
 	}else{
