@@ -161,6 +161,11 @@ app.controller("searchController",function($scope,$controller,$location,searchSe
 		} else {
 			return false;
 		}
+	};
+
+	$scope.sou = function () {
+		location.href='http://search.pinyougou.com/search.html#?keywords=' + $scope.searchMap.keywords;
+		$scope.search();
 	}
 	
 });
