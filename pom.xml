@@ -26,6 +26,10 @@
         <module>pinyougou_page_interface</module>
         <module>pinyougou_page_service</module>
         <module>pinyougou_page_web</module>
+        <module>pinyougou_sms</module>
+        <module>pinyougou_user_interface</module>
+        <module>pinyougou_user_service</module>
+        <module>pinyougou_user_web</module>
     </modules>
     <packaging>pom</packaging>
 
