@@ -27,7 +27,7 @@
        p:host-name="${redis.host}" p:port="${redis.port}" p:password="${redis.pass}" p:pool-config-ref="poolConfig"/>  
 
     <!--操作redis缓存的模板对象-->
-   <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">  
+   <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
     	<property name="connectionFactory" ref="jedisConnectionFactory" />
    </bean>  
 
