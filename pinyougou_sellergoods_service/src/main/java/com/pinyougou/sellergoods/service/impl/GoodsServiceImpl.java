@@ -119,7 +119,7 @@ public class GoodsServiceImpl implements GoodsService {
         // 设置商家ID
         item.setSeller(tbGoods.getSellerId());
         //设置商家名称
-        item.setSeller(sellerMapper.selectByPrimaryKey(tbGoods.getSellerId()).getNickName());
+        item.setSeller(tbGoods.getSellerId());
         // 设置品牌名称
         item.setBrand(brandMapper.selectByPrimaryKey(tbGoods.getBrandId()).getName());
         // 设置分类名称
