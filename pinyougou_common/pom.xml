@@ -65,6 +65,12 @@
             <version>4.9</version>
         </dependency>
 
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- 缓存 -->
         <dependency>
             <groupId>redis.clients</groupId>
