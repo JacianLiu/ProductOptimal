@@ -2,7 +2,7 @@
 app.controller('cartController' ,function($scope,$controller   ,cartService){
 	
 	$controller('baseController',{$scope:$scope});//继承
-	
+
     //查询购物车列表
 	$scope.findCartList=function(){
         cartService.findCartList().success(
@@ -26,8 +26,8 @@ app.controller('cartController' ,function($scope,$controller   ,cartService){
 			}
         })
     }
-    
-    
+
+
     //统计商品总数量和总金额
 	sum=function () {
 		//总数量
