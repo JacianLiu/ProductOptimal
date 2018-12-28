@@ -71,7 +71,7 @@ public class CartServiceImpl implements CartService {
             } else {
                 // 购物车列表中存在该商品
                 // 修改商品数量以及商品小计金额
-                orderItem.setNum(orderItem.getNum() + num);
+                orderItem.setNum(num);
                 orderItem.setTotalFee(new BigDecimal(orderItem.getNum().doubleValue() * orderItem.getPrice().doubleValue()));
                 if (orderItem.getNum() < 1) {
                     // 如果购物车明细列表中该商品数量小于 1 则从购物车明细列表中删除该明细对象

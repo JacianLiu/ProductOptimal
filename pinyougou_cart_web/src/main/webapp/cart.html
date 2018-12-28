@@ -59,7 +59,7 @@
 		</div>
 		<!--All goods-->
 		<div class="allgoods">
-			<h4>全部商品<span>11</span></h4>
+			<h4>全部商品<span>{{cartList.length}}</span></h4>
 			<div class="cart-main">
 				<div class="yui3-g cart-th">
 					<div class="yui3-u-1-4"><input type="checkbox" name="" id="" value="" /> 全部</div>
@@ -89,13 +89,13 @@
 								
 								<li class="yui3-u-1-8"><span class="price">{{orderItem.price.toFixed(2)}}</span></li>
 								<li class="yui3-u-1-8">
-									<a href="javascript:void(0)" class="increment mins" ng-click="addItemToCartList(orderItem.itemId,-1)">-</a>
-									<input autocomplete="off" type="text" value="{{orderItem.num}}" minnum="1" class="itxt" />
-									<a href="javascript:void(0)" class="increment plus" ng-click="addItemToCartList(orderItem.itemId,1)">+</a>
+									<a href="javascript:void(0)" class="increment mins" ng-click="addItemToCartList(orderItem.itemId, orderItem.num - 1)">-</a>
+									<input autocomplete="off" type="text" ng-model="orderItem.num" ng-change="addItemToCartList(orderItem.itemId, orderItem.num)" minnum="1" class="itxt" />
+									<a href="javascript:void(0)" class="increment plus" ng-click="addItemToCartList(orderItem.itemId,orderItem.num + 1)">+</a>
 								</li>
 								<li class="yui3-u-1-8"><span class="sum">{{orderItem.totalFee.toFixed(2)}}</span></li>
 								<li class="yui3-u-1-8">
-									<a href="#none" ng-click="addItemToCartList(orderItem.itemId,-orderItem.num)">删除</a><br />
+									<a href="#none" ng-click="addItemToCartList(orderItem.itemId,orderItem.num-orderItem.num)">删除</a><br />
 									<a href="#none">移到我的关注</a>
 								</li>
 							</ul>
