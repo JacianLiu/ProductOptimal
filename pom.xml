@@ -35,6 +35,8 @@
         <module>pinyougou_cart_web</module>
         <module>pinyougou_order_interface</module>
         <module>pinyougou_order_service</module>
+        <module>pinyougou_pay_interface</module>
+        <module>pinyougou_pay_service</module>
     </modules>
     <packaging>pom</packaging>
 
