@@ -11,10 +11,10 @@ app.controller('cartController' ,function($scope,$controller   ,cartService){
 				$scope.cartList=response;
                 //统计商品总数量和总金额
 				sum();
-			}			
+			}
 		);
-	} 
-	
+	}
+
 	//添加商品到购物车列表
 	$scope.addItemToCartList=function (itemId,num) {
         cartService.addItemToCartList(itemId,num).success(function (response) {
@@ -25,7 +25,12 @@ app.controller('cartController' ,function($scope,$controller   ,cartService){
 				alert(response.message);
 			}
         })
-    }
+    };
+
+	//添加商品到购物车列表
+	$scope.addItemToCartListForNum=function (itemId, oldNum) {
+		$scope.addItemToCartList(itemId, $("#num").val() - oldNum);
+	}
 
 
     //统计商品总数量和总金额
@@ -46,5 +51,5 @@ app.controller('cartController' ,function($scope,$controller   ,cartService){
 			}
 		}
     }
-	
+
 });

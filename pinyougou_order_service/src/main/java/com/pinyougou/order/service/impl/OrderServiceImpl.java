@@ -5,11 +5,13 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.pinyougou.mapper.TbOrderItemMapper;
 import com.pinyougou.mapper.TbOrderMapper;
+import com.pinyougou.mapper.TbPayLogMapper;
 import com.pinyougou.order.service.OrderService;
 import com.pinyougou.pojo.TbOrder;
 import com.pinyougou.pojo.TbOrderExample;
 import com.pinyougou.pojo.TbOrderExample.Criteria;
 import com.pinyougou.pojo.TbOrderItem;
+import com.pinyougou.pojo.TbPayLog;
 import entity.Cart;
 import entity.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import utils.IdWorker;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -60,6 +63,9 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private TbOrderItemMapper orderItemMapper;
 
+    @Autowired
+    private TbPayLogMapper payLogMapper;
+
     /**
      * 增加
      */
@@ -68,12 +74,17 @@ public class OrderServiceImpl implements OrderService {
         // 订单与商家关联 , 购物车列表也与商家关联
         String userId = order.getUserId();
         List<Cart> cartList = (List<Cart>) redisTemplate.boundValueOps(userId).get();
+        // 支付总金额
+        double totalMoney = 0.00;
+        // 记录支付日志关联的订单集合
+        List<String> ids = new ArrayList<>();
         // 基于商家购物车对象生成订单
         for (Cart cart : cartList) {
             // 创建订单对象
             TbOrder tbOrder = new TbOrder();
             // 组装后台数据
             long orderId = idWorker.nextId();
+            ids.add(orderId + "");
             tbOrder.setOrderId(orderId);
             // 未支付
             tbOrder.setStatus("1");
@@ -98,8 +109,23 @@ public class OrderServiceImpl implements OrderService {
                 orderItem.setOrderId(orderId);
                 orderItemMapper.insert(orderItem);
             }
+            totalMoney += payment;
             tbOrder.setPayment(new BigDecimal(payment));
             orderMapper.insert(tbOrder);
+        }
+        // 当支付方式是在线支付时 , 需要在系统中记录支付操作
+        if ("1".equals(order.getPaymentType())) {
+            TbPayLog payLog = new TbPayLog();
+            payLog.setOutTradeNo(idWorker.nextId() + "");
+            payLog.setCreateTime(new Date());
+            payLog.setTotalFee((long) (totalMoney*100));
+            payLog.setUserId(userId);
+            payLog.setTradeState("1");
+            payLog.setOrderList(ids.toString().replace("[", "").replace("]", "").replace(" ", ""));
+            payLog.setPayType("1");
+            payLogMapper.insert(payLog);
+            // 将支付日志存入 redis
+            redisTemplate.boundHashOps("payLog").put(userId, payLog);
         }
         redisTemplate.delete(userId);
     }
