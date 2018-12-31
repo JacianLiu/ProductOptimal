@@ -4,8 +4,14 @@ target/
 .project
 .classpath
 .externalToolBuilders
-*.class
 *svn/
 .idea/
-*.jar
 ~*
+*.html
+js/
+assets/
+css/
+data/
+fonts/
+img/
+plugins/
