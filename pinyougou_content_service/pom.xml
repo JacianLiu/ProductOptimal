@@ -13,6 +13,7 @@
     <artifactId>pinyougou_content_service</artifactId>
 
     <dependencies>
+		<!-- Spring -->
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework</groupId>
