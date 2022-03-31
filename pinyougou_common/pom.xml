@@ -14,7 +14,7 @@
 
     <!-- 集中定义依赖版本号 -->
     <properties>
-        <spring.version>4.2.4.RELEASE</spring.version>
+        <spring.version>5.3.18</spring.version>
     </properties>
 
     <dependencies>
