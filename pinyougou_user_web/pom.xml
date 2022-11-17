@@ -101,7 +101,7 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-cas</artifactId>
-            <version>4.1.0.RELEASE</version>
+            <version>4.2.13.RELEASE</version>
         </dependency>
         <!-- cas客户端jar -->
         <dependency>
